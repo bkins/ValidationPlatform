@@ -1,9 +1,22 @@
 ## Standard .NET Git Ignore Template
 
-# Build Folders
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
 [Bb]in/
 [Oo]bj/
 [Tt]emp/
+[Ll]og/
+[Ll]ogs/
+artifacts/
 
 # IDE Settings & Files
 .vs/
@@ -26,18 +39,31 @@ ehthumbs.db
 Desktop.ini
 .DS_Store
 
-# Logs
+# Logs and diagnostics
 *.log
 hs_err_pid*.log
+CodeCoverage/
+*.binlog
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Local agent and generated test output
 .agents/
 TestResults/
 
 # NuGet Packages
 packages/
-# Exclude paket.lock
+*.nupkg
+*.snupkg
 !paket.lock
 project.lock.json
 project.fragment.lock.json
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
 
 # Local Configuration
 .env
@@ -45,3 +71,7 @@ project.fragment.lock.json
 .env.*.local
 appsettings.local.json
 appsettings.Development.json
+
+# Temporary files
+~$*
+*~
