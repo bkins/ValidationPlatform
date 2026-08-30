@@ -182,3 +182,20 @@ Execute the tests directly or build the solution:
 ```bash
 dotnet test
 ```
+
+---
+
+# Build Preflight
+
+Before a full solution build, run the no-kill preflight:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\preflight-build.ps1
+dotnet build .\ValidationPlatform.slnx
+```
+
+The preflight checks for running `WatchLists` and `testhost` processes that commonly
+lock shared build outputs used by `ValidationPlatform.Tests.WatchList`. If it finds
+a likely lock, it prints the process id and path, then exits with code `2`. Close the
+running app or wait for the test host to exit, then rerun the build. The preflight
+does not stop processes automatically.
