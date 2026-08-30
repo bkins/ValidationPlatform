@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.11" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ValidationPlatform.Core\ValidationPlatform.Core.csproj" />
+    <ProjectReference Include="..\ValidationPlatform.Providers.Http\ValidationPlatform.Providers.Http.csproj" />
+    <ProjectReference Include="C:\Users\benho\source\repos\TeamCommandCenter\src\TeamCommandCenter.Api\TeamCommandCenter.Api.csproj" />
+    <ProjectReference Include="C:\Users\benho\source\repos\TeamCommandCenter\src\TeamCommandCenter.Core\TeamCommandCenter.Core.csproj" />
+    <ProjectReference Include="C:\Users\benho\source\repos\TeamCommandCenter\src\TeamCommandCenter.Infrastructure\TeamCommandCenter.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

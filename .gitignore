@@ -1,0 +1,47 @@
+## Standard .NET Git Ignore Template
+
+# Build Folders
+[Bb]in/
+[Oo]bj/
+[Tt]emp/
+
+# IDE Settings & Files
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# ReSharper / Rider files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.user.g.cs
+
+# OS/Platform Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+hs_err_pid*.log
+.agents/
+TestResults/
+
+# NuGet Packages
+packages/
+# Exclude paket.lock
+!paket.lock
+project.lock.json
+project.fragment.lock.json
+
+# Local Configuration
+.env
+.env.local
+.env.*.local
+appsettings.local.json
+appsettings.Development.json

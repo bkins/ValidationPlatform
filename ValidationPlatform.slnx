@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ValidationPlatform.Core/ValidationPlatform.Core.csproj" />
+    <Project Path="src/ValidationPlatform.Providers.Http/ValidationPlatform.Providers.Http.csproj" />
+    <Project Path="src/ValidationPlatform.Providers.Windows/ValidationPlatform.Providers.Windows.csproj" />
+    <Project Path="src/ValidationPlatform.Runner/ValidationPlatform.Runner.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.CognitiveApi/ValidationPlatform.Tests.CognitiveApi.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.InsAndOuts/ValidationPlatform.Tests.InsAndOuts.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.LaaSmoke/ValidationPlatform.Tests.LaaSmoke.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.NlFlows/ValidationPlatform.Tests.NlFlows.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.TeamCommandCenter/ValidationPlatform.Tests.TeamCommandCenter.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.WatchList/ValidationPlatform.Tests.WatchList.csproj" />
+  </Folder>
+</Solution>
