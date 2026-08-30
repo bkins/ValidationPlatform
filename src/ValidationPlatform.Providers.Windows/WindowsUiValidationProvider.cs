@@ -12,6 +12,7 @@ public class WindowsUiValidationProvider : IUiValidationProvider
 
     private const int MOUSEEVENTF_LEFTDOWN = 0x02;
     private const int MOUSEEVENTF_LEFTUP = 0x04;
+    private static readonly string ClickLogPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "ValidationPlatform-clicks.log");
 
     public string Name => "Windows UI Automation (UIA3) Provider";
 
@@ -23,24 +24,37 @@ public class WindowsUiValidationProvider : IUiValidationProvider
 
     public Task ClickAsync(ElementQuery query)
     {
-        var element = FindElement(query);
+        var element = FindEnabledElement(query);
         if (element == null)
         {
             throw new Exception($"UI Element not found for query: {query}");
         }
 
-        try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", $"ClickAsync: Found element ID={element.Current.AutomationId} Name=\"{element.Current.Name}\" Type={element.Current.ControlType.ProgrammaticName}\n"); } catch {}
+        WriteClickLog($"ClickAsync: Found element ID={element.Current.AutomationId} Name=\"{element.Current.Name}\" Type={element.Current.ControlType.ProgrammaticName} Enabled={element.Current.IsEnabled}");
 
         if (element.TryGetCurrentPattern(InvokePattern.Pattern, out var invPattern))
         {
-            try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", "ClickAsync: Calling InvokePattern.Invoke()\n"); } catch {}
-            ((InvokePattern)invPattern).Invoke();
-            return Task.CompletedTask;
+            WriteClickLog("ClickAsync: Calling InvokePattern.Invoke()");
+            try
+            {
+                ((InvokePattern)invPattern).Invoke();
+                return Task.CompletedTask;
+            }
+            catch (ElementNotEnabledException ex)
+            {
+                WriteClickLog($"InvokePattern.Invoke failed because the element was not enabled: {ex.Message}. Attempting simulated physical click...");
+                if (TryPhysicalClick(element, out var clickFailure))
+                {
+                    return Task.CompletedTask;
+                }
+
+                throw new InvalidOperationException($"UI element was visible but not enabled for query: {query}. Physical click fallback also failed: {clickFailure}", ex);
+            }
         }
 
         if (element.TryGetCurrentPattern(SelectionItemPattern.Pattern, out var selPattern))
         {
-            try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", "ClickAsync: Calling SelectionItemPattern.Select()\n"); } catch {}
+            WriteClickLog("ClickAsync: Calling SelectionItemPattern.Select()");
             try
             {
                 ((SelectionItemPattern)selPattern).Select();
@@ -48,50 +62,97 @@ public class WindowsUiValidationProvider : IUiValidationProvider
             }
             catch (Exception ex)
             {
-                try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", $"SelectionItemPattern.Select failed: {ex.Message}. Attempting simulated physical click...\n"); } catch {}
-                try
+                WriteClickLog($"SelectionItemPattern.Select failed: {ex.Message}. Attempting simulated physical click...");
+                if (TryPhysicalClick(element, out _))
                 {
-                    var rect = element.Current.BoundingRectangle;
-                    if (rect != System.Windows.Rect.Empty)
-                    {
-                        int x = (int)(rect.Left + rect.Width / 2);
-                        int y = (int)(rect.Top + rect.Height / 2);
-                        System.Windows.Forms.Cursor.Position = new System.Drawing.Point(x, y);
-                        Thread.Sleep(200);
-                        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, x, y, 0, 0);
-                        try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", $"Simulated click succeeded at ({x}, {y})\n"); } catch {}
-                        return Task.CompletedTask;
-                    }
+                    return Task.CompletedTask;
                 }
-                catch (Exception clickEx)
-                {
-                    try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", $"Simulated click failed: {clickEx.Message}\n"); } catch {}
-                }
+
                 throw;
             }
         }
 
-        try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", "ClickAsync: No Invoke or Selection pattern found! Attempting simulated physical click...\n"); } catch {}
+        WriteClickLog("ClickAsync: No Invoke or Selection pattern found. Attempting simulated physical click...");
+        if (TryPhysicalClick(element, out var failureMessage))
+        {
+            return Task.CompletedTask;
+        }
+
+        throw new InvalidOperationException($"Element does not support InvokePattern or SelectionItemPattern, and physical click fallback failed: {query}. {failureMessage}");
+    }
+
+    private static void WriteClickLog(string message)
+    {
+        try
+        {
+            System.IO.File.AppendAllText(ClickLogPath, $"{DateTimeOffset.Now:O} {message}{Environment.NewLine}");
+        }
+        catch
+        {
+            // Diagnostics must never fail a smoke test.
+        }
+    }
+
+    private static bool TryPhysicalClick(AutomationElement element, out string failureMessage)
+    {
+        failureMessage = string.Empty;
+
         try
         {
             var rect = element.Current.BoundingRectangle;
-            if (rect != System.Windows.Rect.Empty)
+            if (rect == System.Windows.Rect.Empty)
             {
-                int x = (int)(rect.Left + rect.Width / 2);
-                int y = (int)(rect.Top + rect.Height / 2);
-                System.Windows.Forms.Cursor.Position = new System.Drawing.Point(x, y);
-                Thread.Sleep(200);
-                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, x, y, 0, 0);
-                try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", $"Simulated click succeeded at ({x}, {y})\n"); } catch {}
-                return Task.CompletedTask;
+                failureMessage = "Element bounding rectangle was empty.";
+                WriteClickLog(failureMessage);
+                return false;
             }
+
+            var x = (int)(rect.Left + rect.Width / 2);
+            var y = (int)(rect.Top + rect.Height / 2);
+            System.Windows.Forms.Cursor.Position = new System.Drawing.Point(x, y);
+            Thread.Sleep(200);
+            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+            WriteClickLog($"Simulated click succeeded at ({x}, {y})");
+            return true;
         }
-        catch (Exception clickEx)
+        catch (Exception ex)
         {
-            try { System.IO.File.AppendAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\click_logs.txt", $"Simulated click failed: {clickEx.Message}\n"); } catch {}
+            failureMessage = ex.Message;
+            WriteClickLog($"Simulated click failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    private AutomationElement? FindEnabledElement(ElementQuery query)
+    {
+        var timeout = query.Timeout ?? TimeSpan.FromSeconds(10);
+        var stopwatch = Stopwatch.StartNew();
+        AutomationElement? lastElement = null;
+
+        while (stopwatch.Elapsed < timeout)
+        {
+            lastElement = FindElement(query with { Timeout = TimeSpan.FromMilliseconds(250) });
+            if (lastElement == null)
+            {
+                continue;
+            }
+
+            try
+            {
+                if (lastElement.Current.IsEnabled)
+                {
+                    return lastElement;
+                }
+            }
+            catch (ElementNotAvailableException)
+            {
+                lastElement = null;
+            }
+
+            Thread.Sleep(200);
         }
 
-        throw new InvalidOperationException($"Element does not support InvokePattern or SelectionItemPattern: {query}");
+        return lastElement;
     }
 
     public Task TypeTextAsync(ElementQuery query, string text)

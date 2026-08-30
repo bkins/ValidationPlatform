@@ -114,7 +114,7 @@ function Start-TestApi {
     $apiStdoutPath = Join-Path $suiteOutputDir "api-stdout.log"
     $apiStderrPath = Join-Path $suiteOutputDir "api-stderr.log"
     Write-Log "Building API before background launch..." -ForegroundColor Yellow
-    dotnet build "$apiProjectPath" --no-restore | Add-Content -Path $apiStdoutPath
+    dotnet build "$apiProjectPath" --no-restore -p:GeneratePackageOnBuild=false | Add-Content -Path $apiStdoutPath
     Write-Log "Starting background API on port 5276 (Testing environment) using $LlmProvider provider..." -ForegroundColor Yellow
     $apiProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
     $apiProcessStartInfo.FileName = "dotnet"
@@ -241,13 +241,14 @@ try {
         Write-Log "Running: $($suite.Name)..." -ForegroundColor White
         $sw = [System.Diagnostics.Stopwatch]::StartNew()
 
-        $cmdArgs = "test `"$($suite.Path)`" --logger `"console;verbosity=minimal`""
+        $cmdArgs = "test `"$($suite.Path)`" --no-restore -p:GeneratePackageOnBuild=false --logger `"console;verbosity=minimal`""
         if ($suite.Filter) {
             $cmdArgs += " --filter `"$($suite.Filter)`""
         }
 
         $envVars = @{
-            "LlmClient__Provider" = $LlmProvider
+            "LlmClient__Provider"           = $LlmProvider
+            "ValidationPlatformWindowsOnly" = "true"
         }
         if ($suite.RequiresExternalApi) {
             $envVars["API_BASE_URL"] = "http://localhost:5276"

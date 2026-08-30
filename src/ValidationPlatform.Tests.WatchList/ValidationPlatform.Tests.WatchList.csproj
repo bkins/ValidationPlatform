@@ -23,7 +23,9 @@
   <ItemGroup>
     <ProjectReference Include="..\ValidationPlatform.Core\ValidationPlatform.Core.csproj" />
     <ProjectReference Include="..\ValidationPlatform.Providers.Windows\ValidationPlatform.Providers.Windows.csproj" />
-    <ProjectReference Include="..\..\..\..\WatchList\WatchLists\WatchLists.csproj" />
+    <ProjectReference Include="..\..\..\..\WatchList\WatchLists\WatchLists.csproj"
+                      AdditionalProperties="ValidationPlatformWindowsOnly=true"
+                      SetTargetFramework="TargetFramework=net9.0-windows10.0.19041.0" />
   </ItemGroup>
 
 </Project>
