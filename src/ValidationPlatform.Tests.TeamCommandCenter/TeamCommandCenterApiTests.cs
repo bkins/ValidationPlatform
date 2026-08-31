@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TeamCommandCenter.Infrastructure.Persistence;
 using ValidationPlatform.Providers.Http;
 using Xunit;
@@ -35,6 +36,11 @@ public sealed class TeamCommandCenterTestApp : WebApplicationFactory<Program>
             }
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlite($"Data Source={_testDbPath}"));
+
+            foreach (var hostedServiceDescriptor in services.Where(serviceDescriptor => serviceDescriptor.ServiceType == typeof(IHostedService)).ToList())
+            {
+                services.Remove(hostedServiceDescriptor);
+            }
         });
     }
 
