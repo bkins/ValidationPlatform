@@ -350,8 +350,7 @@ public class NlFlowTests : IClassFixture<ApiFixture>, IDisposable
     }
 
     [Fact]
-    [Trait("Category", "RealLlm")]
-    public async Task RealLlm_DailyBrief_ReturnsLlmSummary()
+    public async Task FastPath_DailyBrief_ReturnsBrief()
     {
         if (!_fixture.IsApiOnline()) return;
 
@@ -372,7 +371,8 @@ public class NlFlowTests : IClassFixture<ApiFixture>, IDisposable
                 return;
             }
 
-            Assert.False(root.GetProperty("wasFastPath").GetBoolean());
+            Assert.True(root.GetProperty("wasFastPath").GetBoolean());
+            Assert.Equal("GetDailyBrief", root.GetProperty("selectedAction").GetString());
             Assert.True(root.GetProperty("success").GetBoolean());
             Assert.NotEmpty(msg);
         }
