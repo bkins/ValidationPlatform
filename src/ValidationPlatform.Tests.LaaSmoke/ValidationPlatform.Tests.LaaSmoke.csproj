@@ -46,4 +46,8 @@
     <None Include="../../../../LocalAIAssistant/Views/Controls/NativeMarkdownView.cs" Link="Fixtures/NativeMarkdownView.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="../../../../LocalAIAssistant/Views/Controls/SearchResultSpacing.cs" Link="Client/SearchResultSpacing.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/ConversationHistory/ChatHistoryScope.cs" Link="Client/ChatHistoryScope.cs" />
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/ConversationHistory/ConversationHistoryLoader.cs" Link="Client/ConversationHistoryLoader.cs" />
+  </ItemGroup>
 </Project>
