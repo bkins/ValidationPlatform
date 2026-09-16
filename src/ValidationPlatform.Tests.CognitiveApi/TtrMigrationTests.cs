@@ -20,8 +20,10 @@ public sealed class TtrMigrationTests : IClassFixture<ApiFixture>, IDisposable
         CreateSyntheticFixture();
     }
 
-    [Fact]
-    public async Task Plan_SyntheticImmutableFixture_ReturnsDeterministicZeroWritePlan()
+    [Theory]
+    [InlineData("validation")]
+    [InlineData("personal")]
+    public async Task Plan_SyntheticImmutableFixture_ReturnsDeterministicZeroWritePlan(string targetWorkspace)
     {
         if (!_fixture.IsApiOnline()) return;
         using var client = new HttpClient { BaseAddress = new Uri($"http://{ApiFixture.ApiHost}:{ApiFixture.ApiPort}") };
@@ -35,7 +37,7 @@ public sealed class TtrMigrationTests : IClassFixture<ApiFixture>, IDisposable
                               , expectedDatabaseSha256 = sourceHash
                               , logicalSourceInstance  = "validation-synthetic"
                               , sourceTimeZoneId       = "America/Los_Angeles"
-                              , targetPartition        = "validation"
+                              , targetPartition        = targetWorkspace
                             };
 
         var firstResponse  = await client.PostAsJsonAsync("/api/admin/journal/import/ttr/plan", request);
@@ -48,6 +50,7 @@ public sealed class TtrMigrationTests : IClassFixture<ApiFixture>, IDisposable
         Assert.Equal(sourceHash, first.RootElement.GetProperty("sourceSha256").GetString());
         Assert.Equal(first.RootElement.GetProperty("planSha256").GetString(), second.RootElement.GetProperty("planSha256").GetString());
         Assert.Equal(1, first.RootElement.GetProperty("readyEntryCount").GetInt32());
+        Assert.Equal(targetWorkspace, first.RootElement.GetProperty("targetPartition").GetString());
         Assert.Equal(batchesBefore, await ReadBatchIdsAsync(client));
     }
 
