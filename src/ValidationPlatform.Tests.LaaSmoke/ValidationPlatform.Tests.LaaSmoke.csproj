@@ -34,6 +34,8 @@
     <Compile Include="../../../../LocalAIAssistant/Data/Models/DtoError.cs" Link="Client/DtoError.cs" />
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeItem.cs" Link="Client/KnowledgeItem.cs" />
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeItemDetailNavigation.cs" Link="Client/KnowledgeItemDetailNavigation.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/InboxReturnRefreshPolicy.cs" Link="Client/InboxReturnRefreshPolicy.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeInboxRefreshState.cs" Link="Client/KnowledgeInboxRefreshState.cs" />
   </ItemGroup>
 
 </Project>
