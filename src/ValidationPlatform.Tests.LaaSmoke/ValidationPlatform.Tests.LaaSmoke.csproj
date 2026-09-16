@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,17 @@
     <ProjectReference Include="..\ValidationPlatform.Core\ValidationPlatform.Core.csproj" />
     <ProjectReference Include="..\ValidationPlatform.Providers.Windows\ValidationPlatform.Providers.Windows.csproj" />
     <ProjectReference Include="..\ValidationPlatform.Providers.Http\ValidationPlatform.Providers.Http.csproj" />
+    <ProjectReference Include="..\..\..\..\CP.Shared.Primitives\CP.Shared.Primitives\CP.Shared.Primitives.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../../../../LocalAIAssistant/CognitivePlatform/CpClients/Journal/JournalApiClient.cs" Link="Client/JournalApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/CognitivePlatform/CpClients/Journal/IJournalApiClient.cs" Link="Client/IJournalApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Journals/Models/JournalEntryDto.cs" Link="Client/JournalEntryDto.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Journals/Models/JournalRevisionDto.cs" Link="Client/JournalRevisionDto.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Data/Models/DtoError.cs" Link="Client/DtoError.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeItem.cs" Link="Client/KnowledgeItem.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeItemDetailNavigation.cs" Link="Client/KnowledgeItemDetailNavigation.cs" />
   </ItemGroup>
 
 </Project>
