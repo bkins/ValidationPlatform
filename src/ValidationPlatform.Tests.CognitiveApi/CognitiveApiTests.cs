@@ -10,6 +10,7 @@ public class ApiFixture : IDisposable
     public Process? SpawnedApiProcess { get; private set; }
     public const int ApiPort = 5276;
     public const string ApiHost = "127.0.0.1";
+    public const string AdminSecret = "validation-only-secret";
 
     public ApiFixture()
     {
@@ -36,6 +37,7 @@ public class ApiFixture : IDisposable
             startInfo.EnvironmentVariables["ASPNETCORE_URLS"] = $"http://{ApiHost}:{ApiPort}";
             startInfo.EnvironmentVariables["LlmClient__Provider"] = "Mock";
             startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = "Testing";
+            startInfo.EnvironmentVariables["AdminSettings__AdminSecret"] = AdminSecret;
 
             SpawnedApiProcess = Process.Start(startInfo);
 
@@ -418,4 +420,3 @@ public class CognitiveApiTests : IClassFixture<ApiFixture>, IDisposable
         Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
     }
 }
-
