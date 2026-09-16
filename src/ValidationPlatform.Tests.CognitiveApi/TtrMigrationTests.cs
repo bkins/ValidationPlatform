@@ -51,6 +51,9 @@ public sealed class TtrMigrationTests : IClassFixture<ApiFixture>, IDisposable
         Assert.Equal(first.RootElement.GetProperty("planSha256").GetString(), second.RootElement.GetProperty("planSha256").GetString());
         Assert.Equal(1, first.RootElement.GetProperty("readyEntryCount").GetInt32());
         Assert.Equal(targetWorkspace, first.RootElement.GetProperty("targetPartition").GetString());
+        var entry = Assert.Single(first.RootElement.GetProperty("entries").EnumerateArray());
+        Assert.Matches("^[0-9a-f]{32}$", entry.GetProperty("entryId").GetString()!);
+        Assert.Matches("^[0-9a-f]{32}$", entry.GetProperty("revisionId").GetString()!);
         Assert.Equal(batchesBefore, await ReadBatchIdsAsync(client));
     }
 
