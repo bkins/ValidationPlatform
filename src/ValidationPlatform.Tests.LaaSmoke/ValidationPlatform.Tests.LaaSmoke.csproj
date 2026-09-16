@@ -42,4 +42,7 @@
     <Compile Include="../../../../CognitivePlatform/CognitivePlatform/Contracts/ConversationStreamFrame.cs" Link="Contract/ConversationStreamFrame.cs" />
     <Compile Include="../../../../LocalAIAssistant/CognitivePlatform/CpClients/CognitivePlatform/ConversationStreamPayload.cs" Link="Client/ConversationStreamPayload.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../../LocalAIAssistant/Views/Controls/NativeMarkdownView.cs" Link="Fixtures/NativeMarkdownView.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
