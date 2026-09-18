@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Using Include="CP.Shared.Primitives.Avails.Extensions" />
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/Media/MediaAttachmentApiClient.cs" Link="Client/MediaAttachmentApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/Media/IMediaAttachmentApiClient.cs" Link="Client/IMediaAttachmentApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/Media/MediaAttachmentDto.cs" Link="Client/MediaAttachmentDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
