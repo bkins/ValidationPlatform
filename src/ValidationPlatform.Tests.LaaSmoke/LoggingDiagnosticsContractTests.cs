@@ -92,4 +92,16 @@ public class LoggingDiagnosticsContractTests
         Assert.Contains("DeleteLogEntryAsync", detailCodeBehind);
         Assert.Contains("DeleteEntryButton.Text = \"Deleting...\"", detailCodeBehind);
     }
+
+    [Fact]
+    [Trait("Category", "ClientContract")]
+    public void Logs_Search_Normalizes_Diagnostic_Id_Formats()
+    {
+        var source = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LogsViewModel.cs.txt"));
+
+        Assert.Contains("Guid.TryParse(search", source);
+        Assert.Contains("diagnosticId.ToString(\"N\")", source);
+        Assert.Contains("diagnosticId.ToString(\"D\")", source);
+        Assert.Contains("entry.Properties.Any", source);
+    }
 }

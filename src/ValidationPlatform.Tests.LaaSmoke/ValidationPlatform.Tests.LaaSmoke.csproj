@@ -62,5 +62,6 @@
     <None Include="../../../../LocalAIAssistant/Views/LogsPage.xaml.cs" Link="Fixtures/LogsPage.xaml.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../LocalAIAssistant/Views/LogDetailPage.xaml" Link="Fixtures/LogDetailPage.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../LocalAIAssistant/Views/LogDetailPage.xaml.cs" Link="Fixtures/LogDetailPage.xaml.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../LocalAIAssistant/ViewModels/LogsViewModel.cs" Link="Fixtures/LogsViewModel.cs.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

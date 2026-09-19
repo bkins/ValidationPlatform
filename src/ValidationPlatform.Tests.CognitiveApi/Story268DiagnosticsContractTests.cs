@@ -16,6 +16,7 @@ public class Story268DiagnosticsContractTests
         Assert.Contains("throw new HttpRequestException(errorMessage, null, response.StatusCode);", geminiSource);
         Assert.Contains("context.Metadata[\"resolved_provider\"] = resolvedProvider;", routerSource);
         Assert.Contains("Diagnostic ID: {diagnosticId}", routerSource);
+        Assert.Contains("Check the API Logs page", routerSource);
         Assert.DoesNotContain("check if Ollama is running locally", routerSource, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Metadata.TryRemove(\"resolved_provider\"", orchestratorSource);
         Assert.Contains("System.Net.Http.HttpClient.OllamaEmbedding", loggerSource);
