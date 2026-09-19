@@ -53,5 +53,7 @@
   <ItemGroup>
     <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/ConversationHistory/ChatHistoryScope.cs" Link="Client/ChatHistoryScope.cs" />
     <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/ConversationHistory/ConversationHistoryLoader.cs" Link="Client/ConversationHistoryLoader.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Services/Logging/LogRedaction.cs" Link="Client/LogRedaction.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Services/Logging/NewestLogLineReader.cs" Link="Client/NewestLogLineReader.cs" />
   </ItemGroup>
 </Project>
