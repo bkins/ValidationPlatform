@@ -44,8 +44,12 @@ public class LoggingDiagnosticsContractTests
 
         Assert.Contains("Text=\"Filter by date range\"", markup);
         Assert.Contains("WidthRequest=\"52\"", markup);
+        Assert.Contains("HandlerChanged=\"OnDateFilterSwitchHandlerChanged\"", markup);
+        Assert.Contains("toggleSwitch.MinWidth = 0", codeBehind);
         Assert.Contains("AutomationId=\"ViewLogDetailsButton\"", markup);
-        Assert.Contains("Tapped=\"OnViewDetailsTapped\"", markup);
+        Assert.Contains("<Button Grid.Column=\"4\"", markup);
+        Assert.Contains("Clicked=\"OnViewDetailsClicked\"", markup);
+        Assert.Contains("MinimumHeightRequest=\"0\"", markup);
         Assert.Contains("Text=\"Details ›\"", markup);
         Assert.DoesNotContain("<Button Grid.Row=\"3\"", markup);
         Assert.DoesNotContain("StaticResource Gray800", detailMarkup);
