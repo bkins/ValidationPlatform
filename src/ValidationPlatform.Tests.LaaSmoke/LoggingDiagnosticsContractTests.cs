@@ -46,7 +46,7 @@ public class LoggingDiagnosticsContractTests
             var records = NewestLogLineReader.ReadRecords(logPath, 2);
             var store = new DeletedLogEntryStore(deletionPath);
 
-            var deleted = await store.AddAsync(logPath, records[0].StorageId);
+            var deleted = await store.AddAsync(logPath, records[0].StorageId, records[0].Offset, records[0].Text);
             var persisted = await store.GetAllAsync();
 
             Assert.True(deleted);
@@ -87,5 +87,6 @@ public class LoggingDiagnosticsContractTests
         Assert.Contains("IsReadOnly=\"True\"", detailMarkup);
         Assert.Contains("DisplayAlert(\"Delete log entry?\"", detailCodeBehind);
         Assert.Contains("DeleteLogEntryAsync", detailCodeBehind);
+        Assert.Contains("DeleteEntryButton.Text = \"Deleting...\"", detailCodeBehind);
     }
 }
