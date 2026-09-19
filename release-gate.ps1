@@ -128,6 +128,7 @@ function Start-TestApi {
     $apiProcessStartInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = "Testing"
     $apiProcessStartInfo.EnvironmentVariables["DOTNET_ENVIRONMENT"] = "Testing"
     $apiProcessStartInfo.EnvironmentVariables["LlmClient__Provider"] = $LlmProvider
+    $apiProcessStartInfo.EnvironmentVariables["AdminSettings__AdminSecret"] = "validation-only-secret"
 
     $apiProc = New-Object System.Diagnostics.Process
     $apiProc.StartInfo = $apiProcessStartInfo
