@@ -40,10 +40,15 @@ public class LoggingDiagnosticsContractTests
     {
         var markup = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LogsPage.xaml.txt"));
         var codeBehind = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LogsPage.xaml.cs.txt"));
+        var detailMarkup = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LogDetailPage.xaml.txt"));
 
         Assert.Contains("Text=\"Filter by date range\"", markup);
+        Assert.Contains("WidthRequest=\"52\"", markup);
         Assert.Contains("AutomationId=\"ViewLogDetailsButton\"", markup);
-        Assert.Contains("Clicked=\"OnViewDetailsClicked\"", markup);
+        Assert.Contains("Tapped=\"OnViewDetailsTapped\"", markup);
+        Assert.Contains("Text=\"Details ›\"", markup);
+        Assert.DoesNotContain("<Button Grid.Row=\"3\"", markup);
+        Assert.DoesNotContain("StaticResource Gray800", detailMarkup);
         Assert.Contains("GoToAsync(nameof(LogDetailPage)", codeBehind);
     }
 }
