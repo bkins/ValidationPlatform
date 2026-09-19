@@ -85,6 +85,9 @@ public class LoggingDiagnosticsContractTests
         Assert.Contains("<Editor Text=\"{Binding Message}\"", detailMarkup);
         Assert.Contains("<Editor Text=\"{Binding Exception}\"", detailMarkup);
         Assert.Contains("IsReadOnly=\"True\"", detailMarkup);
+        Assert.Contains("Loaded=\"OnSelectableEditorLoaded\"", detailMarkup);
+        Assert.Contains("nativeEditor.SetTextIsSelectable(true)", detailCodeBehind);
+        Assert.Contains("nativeEditor.ShowSoftInputOnFocus = false", detailCodeBehind);
         Assert.Contains("DisplayAlert(\"Delete log entry?\"", detailCodeBehind);
         Assert.Contains("DeleteLogEntryAsync", detailCodeBehind);
         Assert.Contains("DeleteEntryButton.Text = \"Deleting...\"", detailCodeBehind);
