@@ -33,4 +33,17 @@ public class LoggingDiagnosticsContractTests
             File.Delete(path);
         }
     }
+
+    [Fact]
+    [Trait("Category", "ClientContract")]
+    public void Logs_Page_Provides_Explicit_Detail_Navigation_And_Date_Filter_Label()
+    {
+        var markup = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LogsPage.xaml.txt"));
+        var codeBehind = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LogsPage.xaml.cs.txt"));
+
+        Assert.Contains("Text=\"Filter by date range\"", markup);
+        Assert.Contains("AutomationId=\"ViewLogDetailsButton\"", markup);
+        Assert.Contains("Clicked=\"OnViewDetailsClicked\"", markup);
+        Assert.Contains("GoToAsync(nameof(LogDetailPage)", codeBehind);
+    }
 }
