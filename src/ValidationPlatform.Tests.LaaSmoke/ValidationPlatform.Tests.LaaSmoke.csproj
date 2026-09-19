@@ -55,8 +55,12 @@
     <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/ConversationHistory/ConversationHistoryLoader.cs" Link="Client/ConversationHistoryLoader.cs" />
     <Compile Include="../../../../LocalAIAssistant/Services/Logging/LogRedaction.cs" Link="Client/LogRedaction.cs" />
     <Compile Include="../../../../LocalAIAssistant/Services/Logging/NewestLogLineReader.cs" Link="Client/NewestLogLineReader.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Services/Logging/LogEntryIdentity.cs" Link="Client/LogEntryIdentity.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Services/Logging/LogLineRecord.cs" Link="Client/LogLineRecord.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Services/Logging/DeletedLogEntryStore.cs" Link="Client/DeletedLogEntryStore.cs" />
     <None Include="../../../../LocalAIAssistant/Views/LogsPage.xaml" Link="Fixtures/LogsPage.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../LocalAIAssistant/Views/LogsPage.xaml.cs" Link="Fixtures/LogsPage.xaml.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../LocalAIAssistant/Views/LogDetailPage.xaml" Link="Fixtures/LogDetailPage.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../LocalAIAssistant/Views/LogDetailPage.xaml.cs" Link="Fixtures/LogDetailPage.xaml.cs.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
