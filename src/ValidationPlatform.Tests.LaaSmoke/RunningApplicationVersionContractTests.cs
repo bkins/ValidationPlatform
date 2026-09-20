@@ -23,9 +23,11 @@ public sealed class RunningApplicationVersionContractTests
     public void ShellHeader_ExposesVersionAsAccessibleAutomationTarget()
     {
         var markup = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "AppShell.xaml.txt"));
+        var project = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "LocalAIAssistant.Ui.Maui.csproj.txt"));
 
         Assert.Contains("AutomationId=\"ApplicationVersionLabel\"", markup);
         Assert.Contains("Text=\"{Binding ApplicationVersionText}\"", markup);
         Assert.Contains("SemanticProperties.Description=\"Running application version\"", markup);
+        Assert.Contains("public const string Version = &quot;$(ApplicationDisplayVersion).$(ApplicationVersion)&quot;%3B", project);
     }
 }
