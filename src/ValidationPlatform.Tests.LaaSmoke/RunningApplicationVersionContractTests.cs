@@ -29,5 +29,6 @@ public sealed class RunningApplicationVersionContractTests
         Assert.Contains("Text=\"{Binding ApplicationVersionText}\"", markup);
         Assert.Contains("SemanticProperties.Description=\"Running application version\"", markup);
         Assert.Contains("public const string Version = &quot;$(ApplicationDisplayVersion).$(ApplicationVersion)&quot;%3B", project);
+        Assert.Contains("<Target Name=\"GenerateBuildEnvironment\" BeforeTargets=\"CoreCompile\">", project);
     }
 }
