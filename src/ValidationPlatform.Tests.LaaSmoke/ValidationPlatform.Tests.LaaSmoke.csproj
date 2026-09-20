@@ -44,6 +44,8 @@
     <Compile Include="../../../../LocalAIAssistant/CognitivePlatform/CpClients/Tasks/ITaskApiClient.cs" Link="Client/ITaskApiClient.cs" />
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Tasks/Models/TasksDto.cs" Link="Client/TasksDto.cs" />
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Tasks/Models/TaskPriorityDto.cs" Link="Client/TaskPriorityDto.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Core/Versioning/RunningApplicationVersion.cs" Link="Client/RunningApplicationVersion.cs" />
+    <None Include="../../../../LocalAIAssistant/AppShell.xaml" Link="Fixtures/AppShell.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
