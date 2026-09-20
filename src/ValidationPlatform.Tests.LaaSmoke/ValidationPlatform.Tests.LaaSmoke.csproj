@@ -40,6 +40,10 @@
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeItemDetailNavigation.cs" Link="Client/KnowledgeItemDetailNavigation.cs" />
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/InboxReturnRefreshPolicy.cs" Link="Client/InboxReturnRefreshPolicy.cs" />
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Inbox/KnowledgeInboxRefreshState.cs" Link="Client/KnowledgeInboxRefreshState.cs" />
+    <Compile Include="../../../../LocalAIAssistant/CognitivePlatform/CpClients/Tasks/TaskApiClient.cs" Link="Client/TaskApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/CognitivePlatform/CpClients/Tasks/ITaskApiClient.cs" Link="Client/ITaskApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Tasks/Models/TasksDto.cs" Link="Client/TasksDto.cs" />
+    <Compile Include="../../../../LocalAIAssistant/Knowledge/Tasks/Models/TaskPriorityDto.cs" Link="Client/TaskPriorityDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
