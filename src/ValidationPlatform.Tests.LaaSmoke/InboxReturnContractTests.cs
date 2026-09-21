@@ -41,6 +41,23 @@ public class InboxReturnContractTests
     }
 
     [Fact]
+    public async Task SuccessfulTaskMutation_Refreshes_The_Registered_Inbox_Exactly_Once()
+    {
+        var state = new KnowledgeInboxRefreshState();
+        var refreshes = 0;
+        state.RegisterRefresh(() =>
+        {
+            refreshes++;
+            return Task.CompletedTask;
+        });
+
+        await state.MarkChangedAndRefreshAsync();
+
+        Assert.Equal(1, refreshes);
+        Assert.Equal(1, state.Revision);
+    }
+
+    [Fact]
     public void NormalEntry_RefreshesAfterReadOnlyReturnWasConsumed()
     {
         var policy = new InboxReturnRefreshPolicy();
