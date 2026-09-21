@@ -7,6 +7,19 @@ public class JournalAttachmentContractTests
 {
     [Fact]
     [Trait("Category", "ClientContract")]
+    public void Journal_Edit_Exposes_Accessible_Unclipped_Remove_Action()
+    {
+        var xaml = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "EditJournalEntryPage.xaml.txt"));
+
+        Assert.Contains("Text=\"Remove\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("MinimumHeightRequest=\"44\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("SemanticProperties.Description=\"{Binding RemoveAccessibilityText}\"", xaml, StringComparison.Ordinal);
+        Assert.DoesNotContain("Text=\"✕\"", xaml, StringComparison.Ordinal);
+        Assert.Contains("HeightRequest=\"132\"", xaml, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    [Trait("Category", "ClientContract")]
     public async Task Journal_List_Uses_Owner_Endpoint_And_Accepts_Empty_Storage_Path()
     {
         var ownerId = Guid.NewGuid();
