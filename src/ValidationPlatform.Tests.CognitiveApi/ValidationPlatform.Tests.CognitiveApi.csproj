@@ -30,6 +30,7 @@
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Orchestrator/ConversationOrchestrator.cs" Link="Fixtures/ConversationOrchestrator.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Telemetry/InMemoryLogger.cs" Link="Fixtures/InMemoryLogger.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Domains/Tasks/TaskKnowledgeSource.cs" Link="Fixtures/TaskKnowledgeSource.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform/Domains/Media/MediaAttachmentService.cs" Link="Fixtures/MediaAttachmentService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/appsettings.json" Link="Fixtures/appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
