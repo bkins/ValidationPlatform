@@ -31,6 +31,9 @@
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Telemetry/InMemoryLogger.cs" Link="Fixtures/InMemoryLogger.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Domains/Tasks/TaskKnowledgeSource.cs" Link="Fixtures/TaskKnowledgeSource.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Domains/Media/MediaAttachmentService.cs" Link="Fixtures/MediaAttachmentService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/IReleaseVersionService.cs" Link="Fixtures/IReleaseVersionService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/ReleaseVersionService.cs" Link="Fixtures/ReleaseVersionService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Pages/ReleaseConsole.razor" Link="Fixtures/ReleaseConsole.razor.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/appsettings.json" Link="Fixtures/appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
