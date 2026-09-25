@@ -350,16 +350,21 @@ public class SmokeTests : WindowsTestBase
         Assert.Equal("phase34_guard", guardText);
         await _chatPage.ClearInputDirectAsync();
 
-        // 18. Navigate to Memory tab and check elements (with provisional memories badge)
+        // 18. Verify the active-conversation shell badge, then check the Memory destination.
         _output.WriteLine("Step 18: Navigate to Memory tab and check elements");
         
-        // Trigger provisional memory count of 3 via the debug hook
+        // The debug hook exercises UX-14's active-conversation shell indicator. The Memory
+        // destination performs an authoritative refresh, so it must not be used to preserve
+        // a synthetic client-only count when the API reports an empty active queue.
         await _shell.NavigateToTabAsync("Chat");
         await Task.Delay(800);
         await _chatPage.TypeMessageAsync("test:set_pending_memory");
         await Task.Delay(400);
         await _chatPage.SendMessageAsync();
         await Task.Delay(800);
+
+        var pendingBadgeVisible = await UiProvider.IsElementVisibleAsync(ElementQuery.ById("MemoryBadgeFrame"));
+        Assert.True(pendingBadgeVisible, "Active-conversation pending-memory badge was not visible after test:set_pending_memory.");
 
         var tree = await UiProvider.GetAccessibilityTreeAsync();
         try { System.IO.File.WriteAllText(@"C:\Users\benho\source\repos\CP\CP.Workbench\accessibility_tree.txt", tree); } catch {}
@@ -384,15 +389,6 @@ public class SmokeTests : WindowsTestBase
         Assert.True(clearStBtnVisible, "'Clear Short Term' button not found on Memory tab.");
         Assert.True(clearLtBtnVisible, "'Clear Long Term' button not found on Memory tab.");
         Assert.True(refreshMemoryBtnVisible, "'Refresh' button not found on Memory tab.");
-
-        bool pendingBadgeVisible = false;
-        for (int i = 0; i < 10; i++)
-        {
-            pendingBadgeVisible = await UiProvider.IsElementVisibleAsync(ElementQuery.ById("ProvisionalMemoriesPendingLabel"));
-            if (pendingBadgeVisible) break;
-            await Task.Delay(500);
-        }
-        Assert.True(pendingBadgeVisible, "Provisional memories pending badge was not visible on Memory tab after test:set_pending_memory.");
 
         // 19. Navigate to Logs tab and verify elements
         _output.WriteLine("Step 19: Navigate to Logs tab and verify elements");
