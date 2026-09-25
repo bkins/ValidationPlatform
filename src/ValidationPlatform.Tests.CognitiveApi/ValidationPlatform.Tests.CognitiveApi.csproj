@@ -33,7 +33,11 @@
     <None Include="../../../../CognitivePlatform/CognitivePlatform/Domains/Media/MediaAttachmentService.cs" Link="Fixtures/MediaAttachmentService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/IReleaseVersionService.cs" Link="Fixtures/IReleaseVersionService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/ReleaseVersionService.cs" Link="Fixtures/ReleaseVersionService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/ReleaseSourceIdentityService.cs" Link="Fixtures/ReleaseSourceIdentityService.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Pages/ReleaseConsole.razor" Link="Fixtures/ReleaseConsole.razor.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Scripts/LAA-Windows-Build.ps1" Link="Fixtures/LAA-Windows-Build.ps1.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Scripts/LAA-Windows-Deploy.ps1" Link="Fixtures/LAA-Windows-Deploy.ps1.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Scripts/PayloadManifest.ps1" Link="Fixtures/PayloadManifest.ps1.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../CognitivePlatform/CognitivePlatform/appsettings.json" Link="Fixtures/appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
