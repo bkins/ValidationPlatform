@@ -46,6 +46,9 @@
     <Compile Include="../../../../LocalAIAssistant/Knowledge/Tasks/Models/TaskPriorityDto.cs" Link="Client/TaskPriorityDto.cs" />
     <Compile Include="../../../../LocalAIAssistant/Core/Versioning/RunningApplicationVersion.cs" Link="Client/RunningApplicationVersion.cs" />
     <None Include="../../../../LocalAIAssistant/AppShell.xaml" Link="Fixtures/AppShell.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../LocalAIAssistant/Views/MainPage.xaml" Link="Fixtures/MainPage.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../../../LocalAIAssistant/Views/MainPage.xaml.cs" Link="Fixtures/MainPage.xaml.cs.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="../../../../LocalAIAssistant/Views/ChatScrollState.cs" Link="Client/ChatScrollState.cs" />
     <None Include="../../../../LocalAIAssistant/Knowledge/Journals/Views/EditJournalEntryPage.xaml" Link="Fixtures/EditJournalEntryPage.xaml.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../LocalAIAssistant/LocalAIAssistant.Ui.Maui.csproj" Link="Fixtures/LocalAIAssistant.Ui.Maui.csproj.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
