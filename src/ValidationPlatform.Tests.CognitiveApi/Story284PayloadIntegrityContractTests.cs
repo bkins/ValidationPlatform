@@ -16,6 +16,7 @@ public sealed class Story284PayloadIntegrityContractTests
         Assert.Contains("CreateSourceIdentityAsync(componentScope)", page);
         Assert.Contains("CognitivePlatformCommitHash", page);
         Assert.Contains("LocalAIAssistantCommitHash", page);
+        Assert.Contains("TryGetProperty(\"Files\"", page);
         Assert.Contains("SystemPaths:CognitivePlatformRepo", sourceIdentityService);
         Assert.Contains("SystemPaths:LocalAIAssistantRepo", sourceIdentityService);
         Assert.Contains("New-PayloadManifest -RootPath $OutputPath", buildScript);
