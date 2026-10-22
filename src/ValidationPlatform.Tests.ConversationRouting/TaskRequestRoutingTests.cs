@@ -21,7 +21,7 @@ using Moq;
 
 namespace ValidationPlatform.Tests.ConversationRouting;
 
-public sealed class TaskRequestRoutingTests
+public sealed partial class TaskRequestRoutingTests
 {
     private readonly Mock<ICapabilityRegistry> _registry = new();
     private readonly Mock<ILlmClient> _client = new();
@@ -157,9 +157,10 @@ public sealed class TaskRequestRoutingTests
             It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
-    private ConversationOrchestrator Build(bool explicitChain = true, bool includeHelp = false)
+    private ConversationOrchestrator Build(bool explicitChain = true, bool includeHelp = false, ActionMetadata[]? additional = null, Mock<IIdempotencyStore>? store = null)
     {
         ActionMetadata[] registered = includeHelp ? [_listTasks, new ActionMetadata { Name = "ListActions", Parameters = [] }] : [_listTasks];
+        registered = registered.Concat(additional ?? []).ToArray();
         _registry.Setup(registry => registry.GetAll()).Returns(registered);
         var actions = new Mock<IActionRegistry>();
         actions.SetupGet(registry => registry.Actions).Returns(registered);
@@ -186,7 +187,7 @@ public sealed class TaskRequestRoutingTests
         var interpreter = new LlmInterpreter(_registry.Object, telemetry, router, catalog, settings, Mock.Of<IPromptLogger>());
         var workspace = new Mock<IWorkspaceContext>();
         workspace.SetupGet(context => context.ActiveWorkspace).Returns("personal");
-        var idempotency = new Mock<IIdempotencyStore>();
+        var idempotency = store ?? new Mock<IIdempotencyStore>();
         idempotency.Setup(store => store.TryGetAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync((ConverseResponse?)null);
         var insights = new Mock<IInsightEngine>();
         insights.Setup(engine => engine.GenerateInsightsAsync(It.IsAny<ConversationContext>(), It.IsAny<CancellationToken>()))
