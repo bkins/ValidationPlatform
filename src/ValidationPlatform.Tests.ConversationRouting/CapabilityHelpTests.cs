@@ -89,6 +89,46 @@ public sealed class CapabilityHelpTests
         Assert.DoesNotContain("Try:", result);
     }
 
+    [Fact]
+    public void Overview_UsesDifferentOperationsAndOmitsDuplicateGeneratedCrud()
+    {
+        var result = Help(
+            new ActionMetadata { Name = "AddJournalEntry", Category = "Journal", Description = "Write a journal entry", Examples = ["Write in my journal", "Add a journal entry"] },
+            new ActionMetadata { Name = "AddJournalEntry_Generated", Category = "Journal", Description = "Adds a new JournalEntry.", Examples = ["Generated add"] },
+            new ActionMetadata { Name = "SearchJournalEntries", Category = "Journal", Description = "Search journal entries", Examples = ["Search my journal"] });
+        Assert.DoesNotContain("JournalEntry", result);
+        Assert.Contains("Search journal entries", result);
+        Assert.Contains("Search my journal", result);
+        Assert.DoesNotContain("Try: “Add a journal entry”", result);
+        Assert.DoesNotContain("Generated add", result);
+    }
+
+    [Fact]
+    public void Overview_LongDescriptionEndsAtWordBoundary()
+    {
+        var result = Help(new ActionMetadata { Name = "Example", Category = "Tasks", Description = new string('x', 130) + " unfinishedword following text" });
+        Assert.Contains(new string('x', 130) + "...", result);
+        Assert.DoesNotContain(" unfin", result);
+    }
+
+    [Fact]
+    public void Overview_PrefersActualDailyCategoryWithinSixGroups()
+    {
+        var actions = Enumerable.Range(0, 8).Select(index => new ActionMetadata
+        { Name = $"Other{index}", Category = $"Area{index}", Description = "Other area" }).ToList();
+        actions.Add(new ActionMetadata { Name = "OpenDay", Category = "Daily", Description = "Plan today", Examples = ["Open my day"] });
+        var result = Help(actions.ToArray());
+        Assert.Contains("**Daily**", result);
+        Assert.Contains("Open my day", result);
+        Assert.DoesNotContain("**Area7**", result);
+    }
+
+    [Fact]
+    public void DomainGuidance_DirectsFullDirectoryToExplicitCommand()
+    {
+        Assert.Contains("List all commands", CognitivePlatform.Api.Actions.GuidanceActions.GetDomainGuidance("Tasks"));
+    }
+
     private static string Help(params ActionMetadata[] actions)
     {
         var registry = new Mock<ICapabilityRegistry>();
