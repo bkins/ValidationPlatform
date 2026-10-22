@@ -41,4 +41,19 @@
     <None Include="../../../../CognitivePlatform/CognitivePlatform/appsettings.json" Link="Fixtures/appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <Compile Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/Testing/*.cs" Link="AdminTesting/%(Filename)%(Extension)" />
+    <Compile Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/TerminalStateService.cs" Link="AdminTesting/TerminalStateService.cs" />
+    <Compile Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/ITerminalStateService.cs" Link="AdminTesting/ITerminalStateService.cs" />
+    <Compile Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/TerminalState.cs" Link="AdminTesting/TerminalState.cs" />
+    <Compile Include="../../../../CognitivePlatform/CognitivePlatform.Admin/Services/TerminalLine.cs" Link="AdminTesting/TerminalLine.cs" />
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/TestProjectCatalogTests.cs" Link="AdminTesting/TestProjectCatalogTests.cs" />
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/TestRunCoordinatorTests.cs" Link="AdminTesting/TestRunCoordinatorTests.cs" />
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/TestProcessRunnerTests.cs" Link="AdminTesting/TestProcessRunnerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/TestOperationEndpointsTests.cs" Link="AdminTesting/TestOperationEndpointsTests.cs" />
+  </ItemGroup>
 </Project>
