@@ -139,11 +139,30 @@ public sealed class TaskRequestRoutingTests
         _client.Verify(client => client.SendAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
     }
 
-    private ConversationOrchestrator Build(bool explicitChain = true)
+    [Theory]
+    [InlineData("What can you help me do?")]
+    [InlineData("How can you help me?")]
+    [InlineData("What can I use this for?")]
+    public async Task Converse_DiscoveryWithUnavailableProviders_OnlyExecutesReadOnlyHelp(string input)
     {
-        _registry.Setup(registry => registry.GetAll()).Returns([_listTasks]);
+        var orchestrator = Build(includeHelp: true);
+        _client.Setup(client => client.SendAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+               .ThrowsAsync(new HttpRequestException("provider unavailable"));
+        var result = await orchestrator.ConverseAsync(new ConverseRequest { SessionId = "help-test", Input = input });
+        Assert.True(result.Success);
+        Assert.True(result.WasFastPath);
+        Assert.Equal("ListActions", result.SelectedAction);
+        _client.Verify(client => client.SendAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()), Times.Never);
+        _execution.Verify(engine => engine.ExecuteAsync(It.Is<ActionMetadata>(action => action.Name != "ListActions"),
+            It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    private ConversationOrchestrator Build(bool explicitChain = true, bool includeHelp = false)
+    {
+        ActionMetadata[] registered = includeHelp ? [_listTasks, new ActionMetadata { Name = "ListActions", Parameters = [] }] : [_listTasks];
+        _registry.Setup(registry => registry.GetAll()).Returns(registered);
         var actions = new Mock<IActionRegistry>();
-        actions.SetupGet(registry => registry.Actions).Returns([_listTasks]);
+        actions.SetupGet(registry => registry.Actions).Returns(registered);
         actions.SetupGet(registry => registry.FastPathActions).Returns([]);
         var fastPath = new FastPathResolver(actions.Object, Mock.Of<IDailyRecordCommandParser>());
         var settings = new LlmClientSettings { Provider = LlmProvider.Groq, Groq = new GroqSettings { Model = "fixture-model" } };
