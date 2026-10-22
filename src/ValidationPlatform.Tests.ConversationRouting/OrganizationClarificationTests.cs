@@ -231,4 +231,80 @@ public sealed partial class TaskRequestRoutingTests
             It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
+    [Fact]
+    public async Task Organization_Streaming_UsesSameQuestionsAndSafeTaskHandoff()
+    {
+        var engine = OrganizationEngine();
+        var replies = new List<string>();
+        foreach (var input in new[] { "Help me get organized", "Tasks", "review active tasks" })
+        {
+            var parts = new List<string>();
+            await foreach (var part in engine.StreamAsync(new ConverseRequest { SessionId = "stream-organize", Input = input }))
+                parts.Add(part);
+            replies.Add(string.Concat(parts));
+        }
+        Assert.Contains("What would help", replies[0]);
+        Assert.Contains("active tasks", replies[1]);
+        Assert.Equal("Active task fixture", replies[2]);
+        _client.VerifyNoOtherCalls();
+        _execution.Verify(engine => engine.ExecuteAsync(It.Is<ActionMetadata>(action => action.Name == "ListTasks"),
+            It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        Assert.Equal(3, _contexts.GetOrCreate("stream-organize").Turns.Count);
+    }
+
+    [Fact]
+    public async Task Organization_StreamingBrainDumpAndCancel_DoesNotStartAnything()
+    {
+        var engine = OrganizationEngine();
+        var replies = new List<string>();
+        foreach (var input in new[] { "Help me get organized", "brain dump", "cancel" })
+        {
+            var parts = new List<string>();
+            await foreach (var part in engine.StreamAsync(new ConverseRequest { SessionId = "stream-organize", Input = input }))
+                parts.Add(part);
+            replies.Add(string.Concat(parts));
+        }
+        Assert.Contains("What would help", replies[0]);
+        Assert.Contains("explain", replies[1]);
+        Assert.Contains("Cancelled", replies[2]);
+        _execution.VerifyNoOtherCalls();
+        _client.VerifyNoOtherCalls();
+    }
+
+    [Fact]
+    public async Task Organization_StreamRetryAfterFinalHandoff_DoesNotExecuteAgain()
+    {
+        var store = new Mock<IIdempotencyStore>();
+        var engine = Build(store: store);
+        var cache = new Dictionary<Guid, ConverseResponse>();
+        store.Setup(source => source.TryGetAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+             .Returns((Guid key, CancellationToken token) => Task.FromResult(cache.GetValueOrDefault(key)));
+        store.Setup(source => source.StoreAsync(It.IsAny<Guid>(), It.IsAny<ConverseResponse>(), It.IsAny<CancellationToken>()))
+             .Returns((Guid key, ConverseResponse response, CancellationToken token) => { cache[key] = response; return Task.CompletedTask; });
+        await engine.ConverseAsync(new ConverseRequest { SessionId = "organize", Input = "Help me get organized" });
+        await engine.ConverseAsync(new ConverseRequest { SessionId = "organize", Input = "Tasks" });
+        var request = new ConverseRequest { SessionId = "organize", Input = "review active tasks", ClientRequestId = Guid.NewGuid() };
+        foreach (var attempt in Enumerable.Range(0, 2))
+            await foreach (var part in engine.StreamAsync(request)) Assert.Equal("Active task fixture", part);
+        _execution.Verify(engine => engine.ExecuteAsync(It.Is<ActionMetadata>(action => action.Name == "ListTasks"),
+            It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        Assert.Equal(3, _contexts.GetOrCreate("organize").Turns.Count);
+    }
+
+    [Fact]
+    public async Task Organization_StreamThenRegularCorrection_RetainsSharedState()
+    {
+        var engine = OrganizationEngine();
+        await foreach (var part in engine.StreamAsync(new ConverseRequest { SessionId = "organize", Input = "Help me get organized" }))
+            Assert.Contains("What would help", part);
+        await engine.ConverseAsync(new ConverseRequest { SessionId = "organize", Input = "Tasks" });
+        var correction = await engine.ConverseAsync(new ConverseRequest { SessionId = "organize", Input = "Actually, daily planning" });
+        Assert.Contains("daily", correction.Message!);
+        await foreach (var part in engine.StreamAsync(new ConverseRequest { SessionId = "organize", Input = "yes please" }))
+            Assert.Equal("Active task fixture", part);
+        _execution.Verify(engine => engine.ExecuteAsync(It.Is<ActionMetadata>(action => action.Name == "GetDomainGuidance"),
+            It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        _client.VerifyNoOtherCalls();
+    }
+
 }
