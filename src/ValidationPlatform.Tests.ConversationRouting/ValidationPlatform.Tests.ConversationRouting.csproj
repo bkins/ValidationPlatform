@@ -13,4 +13,7 @@
     <ProjectReference Include="../../../../CognitivePlatform/CognitivePlatform/CognitivePlatform.Api.csproj" />
     <Using Include="Xunit" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/OrganizationClarificationStateTests.cs" Link="Contracts/OrganizationClarificationStateTests.cs" />
+  </ItemGroup>
 </Project>

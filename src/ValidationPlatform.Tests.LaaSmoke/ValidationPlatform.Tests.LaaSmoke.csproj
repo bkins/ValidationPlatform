@@ -75,4 +75,10 @@
     <None Include="../../../../LocalAIAssistant/Views/LogDetailPage.xaml.cs" Link="Fixtures/LogDetailPage.xaml.cs.txt" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../../../LocalAIAssistant/ViewModels/LogsViewModel.cs" Link="Fixtures/LogsViewModel.cs.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/BrainDump/BrainDumpConversationRouting.cs" Link="Client/BrainDumpConversationRouting.cs" />
+    <Compile Include="../../../../LocalAIAssistant/LocalAIAssistant.Core/BrainDump/OrganizationClarificationApiClient.cs" Link="Client/OrganizationClarificationApiClient.cs" />
+    <Compile Include="../../../../LocalAIAssistant/LaaUnitTests/BrainDumpConversationRoutingTests.cs" Link="Contracts/BrainDumpConversationRoutingTests.cs" />
+  </ItemGroup>
 </Project>
