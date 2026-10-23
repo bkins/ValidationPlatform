@@ -16,7 +16,15 @@ public sealed class WindowsProcessSession : IDisposable
         Process = System.Diagnostics.Process.Start(start) ?? throw new InvalidOperationException("Application failed to start.");
         _owned = true;
         _startedAt = Process.StartTime.ToUniversalTime();
-        _executable = Process.MainModule?.FileName;
+        // MainModule can be temporarily unavailable immediately after CreateProcess.
+        var deadline = Stopwatch.StartNew();
+        do
+        {
+            Process.Refresh();
+            _executable = Process.MainModule?.FileName;
+            if (_executable is not null || Process.HasExited) break;
+            Thread.Sleep(10);
+        } while (deadline.Elapsed < TimeSpan.FromSeconds(2));
     }
 
     public void Attach(int processId)
