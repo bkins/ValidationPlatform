@@ -6,6 +6,7 @@
     <Project Path="src/ValidationPlatform.Runner/ValidationPlatform.Runner.csproj" />
     <Project Path="src/ValidationPlatform.Tests.CognitiveApi/ValidationPlatform.Tests.CognitiveApi.csproj" />
     <Project Path="src/ValidationPlatform.Tests.ConversationRouting/ValidationPlatform.Tests.ConversationRouting.csproj" />
+    <Project Path="src/ValidationPlatform.Tests.Embeddings/ValidationPlatform.Tests.Embeddings.csproj" />
     <Project Path="src/ValidationPlatform.Tests.InsAndOuts/ValidationPlatform.Tests.InsAndOuts.csproj" />
     <Project Path="src/ValidationPlatform.Tests.LaaSmoke/ValidationPlatform.Tests.LaaSmoke.csproj" />
     <Project Path="src/ValidationPlatform.Tests.NlFlows/ValidationPlatform.Tests.NlFlows.csproj" />
