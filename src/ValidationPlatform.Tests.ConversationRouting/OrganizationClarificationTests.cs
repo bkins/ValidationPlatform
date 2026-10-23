@@ -463,4 +463,21 @@ public sealed partial class TaskRequestRoutingTests
         Assert.Equal("daily planning", pending.SelectedArea);
         _execution.VerifyNoOtherCalls();
     }
+    [Theory]
+    [InlineData("Help me plan tomorrow", "open tomorrow's daily plan")]
+    [InlineData("I'm overwhelmed", "hmm")]
+    public async Task Organization_ReofferedChoices_BareYes_DoesNotReuseStaleArea(string starter, string interruption)
+    {
+        var engine = OrganizationEngine();
+        await engine.ConverseAsync(new ConverseRequest { SessionId = "stale", Input = starter });
+        await engine.ConverseAsync(new ConverseRequest { SessionId = "stale", Input = "daily planning" });
+        await engine.ConverseAsync(new ConverseRequest { SessionId = "stale", Input = interruption });
+
+        var response = await engine.ConverseAsync(new ConverseRequest { SessionId = "stale", Input = "yes" });
+
+        Assert.Null(response.SelectedAction);
+        _execution.VerifyNoOtherCalls();
+        _client.VerifyNoOtherCalls();
+    }
+
 }
