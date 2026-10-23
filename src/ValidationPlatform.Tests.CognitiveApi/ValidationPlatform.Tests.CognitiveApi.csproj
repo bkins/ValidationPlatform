@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Compile Include="../ValidationPlatform.Providers.Windows/WindowsProcessSession.cs" Link="AdminTesting/WindowsProcessSession.cs" />
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/AdminLifecycleSafetyTests.cs" Link="AdminTesting/AdminLifecycleSafetyTests.cs" />
+    <Compile Include="../../../../CognitivePlatform/src/CognitivePlatform.Tests/AdminPublishTests.cs" Link="AdminTesting/AdminPublishTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

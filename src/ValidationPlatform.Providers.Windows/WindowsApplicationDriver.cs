@@ -7,7 +7,8 @@ namespace ValidationPlatform.Providers.Windows;
 
 public class WindowsApplicationDriver : IApplicationDriver
 {
-    private Process? _process;
+    private readonly WindowsProcessSession _session = new();
+    private Process? _process => _session.Process;
     private readonly WindowsUiValidationProvider _uiProvider;
 
     public bool IsRunning => _process != null && !_process.HasExited;
@@ -25,59 +26,31 @@ public class WindowsApplicationDriver : IApplicationDriver
             throw new InvalidOperationException("Application is already running.");
         }
 
-        var processName = Path.GetFileNameWithoutExtension(path);
-        foreach (var p in Process.GetProcessesByName(processName))
-        {
-            try
-            {
-                p.Kill(true);
-                p.WaitForExit(1000);
-            }
-            catch
-            {
-                // Safe ignore
-            }
-        }
+        _session.Dispose(); // Release a stale handle when the previous instance exited itself.
 
         var startInfo = new ProcessStartInfo
         {
             FileName = path,
-            Arguments = arguments != null ? string.Join(" ", arguments) : string.Empty,
             UseShellExecute = false,
             CreateNoWindow = false
         };
 
-        _process = Process.Start(startInfo);
-        if (_process == null)
-        {
-            throw new Exception($"Failed to start process: {path}");
-        }
+        foreach (var argument in arguments ?? []) startInfo.ArgumentList.Add(argument);
+        _session.Launch(startInfo);
 
         return Task.CompletedTask;
     }
 
     public Task TerminateAsync()
     {
-        if (_process != null && !_process.HasExited)
-        {
-            try
-            {
-                _process.Kill(true);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Failed to kill process: {ex.Message}");
-            }
-        }
-
-        _process = null;
-        _uiProvider.RootElement = null;
+        try { _session.Dispose(); }
+        finally { _uiProvider.RootElement = null; }
         return Task.CompletedTask;
     }
 
     public Task AttachAsync(int processId)
     {
-        _process = Process.GetProcessById(processId);
+        _session.Attach(processId);
         AttachRootElement();
         return Task.CompletedTask;
     }
