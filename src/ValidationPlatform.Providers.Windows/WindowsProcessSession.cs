@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace ValidationPlatform.Providers.Windows;
 
@@ -16,17 +18,28 @@ public sealed class WindowsProcessSession : IDisposable
         Process = System.Diagnostics.Process.Start(start) ?? throw new InvalidOperationException("Application failed to start.");
         _owned = true;
         _startedAt = Process.StartTime.ToUniversalTime();
-        // MainModule can be temporarily unavailable immediately after CreateProcess.
+        // Query the process image: MainModule can report ntdll.dll during loader startup.
         var deadline = Stopwatch.StartNew();
         do
         {
             Process.Refresh();
-            _executable = Process.MainModule?.FileName;
+            _executable = GetExecutablePath(Process);
             if (_executable is not null || Process.HasExited) break;
             Thread.Sleep(10);
         } while (deadline.Elapsed < TimeSpan.FromSeconds(2));
     }
 
+    private static string? GetExecutablePath(Process process)
+    {
+        if (!OperatingSystem.IsWindows()) return process.MainModule?.FileName;
+        var buffer = new StringBuilder(32768);
+        var length = buffer.Capacity;
+        return QueryFullProcessImageName(process.Handle, 0, buffer, ref length) ? buffer.ToString() : null;
+    }
+
+    [DllImport("kernel32.dll", EntryPoint = "QueryFullProcessImageNameW", CharSet = CharSet.Unicode, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool QueryFullProcessImageName(IntPtr process, int flags, StringBuilder path, ref int length);
     public void Attach(int processId)
     {
         EnsureEmpty();
@@ -48,7 +61,7 @@ public sealed class WindowsProcessSession : IDisposable
         {
             if (!_owned || process.HasExited) return;
             process.Refresh();
-            if (_executable is null || process.StartTime.ToUniversalTime() != _startedAt || !string.Equals(process.MainModule?.FileName, _executable, StringComparison.OrdinalIgnoreCase))
+            if (_executable is null || process.StartTime.ToUniversalTime() != _startedAt || !string.Equals(GetExecutablePath(process), _executable, StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("Application process identity changed; refusing termination.");
             try { process.Kill(entireProcessTree: true); }
             catch (InvalidOperationException) when (process.HasExited) { return; }
